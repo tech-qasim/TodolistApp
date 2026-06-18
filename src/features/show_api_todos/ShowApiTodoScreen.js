@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { FlatList } from "react-native";
+import { FlatList, Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTodos } from "../../redux/todoSlice";
 
 export default function ShowApiTodoScreen() {
   const dispatch = useDispatch();
 
-  const todos = useSelector((state) => state.apiTodos);
+  const todos = useSelector((state) => state.todo.apiTodos);
 
   useEffect(() => {
     dispatch(fetchTodos());
