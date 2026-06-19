@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddTodoScreen from "../features/add_todo/AddTodoScreen";
 import ShowApiTodoScreen from "../features/show_api_todos/ShowApiTodoScreen";
 import ShowTodoScreen from "../features/show_todo/ShowTodoScreen";
-import { Todo } from "../redux/todoSlice";
+import { Todo } from "../types/todo";
 
 export type RootStackParamList = {
   ShowTodo: { todo?: Todo } | undefined;

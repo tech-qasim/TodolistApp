@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { IconButton, Menu } from "react-native-paper";
 import { useDispatch } from "react-redux";
-import { deleteTodo, Todo, toggleCheckMark } from "../redux/todoSlice";
+import { deleteTodo, toggleCheckMark } from "../redux/todoSlice";
+import { Todo } from "../types/todo";
 
 type TodoCardProps = {
   todo: Todo;

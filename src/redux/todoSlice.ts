@@ -1,12 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ApiTodo, getTodos } from "../api/todoApi";
-
-export type Todo = {
-  id: string;
-  title: string;
-  description: string;
-  isCompleted: boolean;
-};
+import { Todo } from "types/todo";
+import { getTodos } from "../api/todoApi";
+import { ApiTodo } from "../types/api_todo";
 
 interface TodoState {
   todos: Todo[];

@@ -1,11 +1,5 @@
+import { ApiTodo } from "types/api_todo";
 import apiClient from "./apiClient";
-
-export type ApiTodo = {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-};
 
 const getTodos = async (page: number): Promise<ApiTodo[]> => {
   try {
