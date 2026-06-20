@@ -5,18 +5,23 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { IconButton, Menu } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { deleteTodo, toggleCheckMark } from "../redux/todoSlice";
+import { Todo } from "../types/todo";
 
-export default function TodoCard({ todo }) {
+type TodoCardProps = {
+  todo: Todo;
+};
+
+export default function TodoCard({ todo }: TodoCardProps) {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
-  const handleCheckMark = (id) => {
+  const handleCheckMark = (id: string) => {
     const todoId = {
       id: id,
     };
     dispatch(toggleCheckMark(todoId));
   };
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     const todoId = {
       id: id,
     };
@@ -25,7 +30,7 @@ export default function TodoCard({ todo }) {
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate("AddTodo", { todo: todo });
+        navigation.navigate("AddTodo", { todo });
       }}
     >
       <View style={styles.container}>
@@ -97,4 +102,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
+  iconButton: {},
 });

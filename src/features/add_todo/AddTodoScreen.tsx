@@ -1,13 +1,17 @@
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import uuid from "react-native-uuid";
 import { useDispatch } from "react-redux";
 import AppColors from "../../constants/colors/colors";
+import { RootStackParamList } from "../../navigation/AppNavigation";
 import { addTodo, editTodo } from "../../redux/todoSlice";
 
-export default function AddTodoScreen({ route }) {
+type AddTodoProps = NativeStackScreenProps<RootStackParamList, "AddTodo">;
+
+export default function AddTodoScreen({ route }: AddTodoProps) {
   const todo = route.params?.todo;
 
   const [title, setTitle] = useState(todo?.title || "");
