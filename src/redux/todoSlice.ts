@@ -1,26 +1,21 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Todo } from "types/todo";
-import { getTodos } from "../api/todoApi";
 import { ApiTodo } from "../types/api_todo";
+import { fetchTodos } from "./todoThunk";
 
 interface TodoState {
   todos: Todo[];
   apiTodos: ApiTodo[];
   page: number;
+  isLoading: boolean;
 }
 
 const initialState: TodoState = {
   todos: [],
   apiTodos: [],
   page: 1,
+  isLoading: false,
 };
-
-export const fetchTodos = createAsyncThunk<ApiTodo[], number>(
-  "todo/fetchTodos",
-  async (page: number) => {
-    return await getTodos(page);
-  },
-);
 
 const todoSlice = createSlice({
   name: "todo",
@@ -56,6 +51,12 @@ const todoSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchTodos.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchTodos.rejected, (state, action) => {
+      state.isLoading = false;
+    });
     builder.addCase(fetchTodos.fulfilled, (state, action) => {
       const fetchTodos = action.payload.map((apiTodo) => {
         return {
@@ -66,6 +67,7 @@ const todoSlice = createSlice({
         };
       });
       state.apiTodos.push(...fetchTodos);
+      state.isLoading = false;
     });
   },
 });
