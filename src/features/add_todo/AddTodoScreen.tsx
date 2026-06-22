@@ -5,9 +5,11 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import uuid from "react-native-uuid";
 import { useDispatch } from "react-redux";
+import { addTodos } from "redux/todoThunk";
+import { AppDispatch } from "../../app/store";
 import AppColors from "../../constants/colors/colors";
 import { RootStackParamList } from "../../navigation/AppNavigation";
-import { addTodo, editTodo } from "../../redux/todoSlice";
+import { editTodo } from "../../redux/todoSlice";
 
 type AddTodoProps = NativeStackScreenProps<RootStackParamList, "AddTodo">;
 
@@ -18,7 +20,7 @@ export default function AddTodoScreen({ route }: AddTodoProps) {
   const [description, setDescription] = useState(todo?.description || "");
   const [visible, setVisible] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
 
   const handleSaveButton = () => {
@@ -41,7 +43,7 @@ export default function AddTodoScreen({ route }: AddTodoProps) {
       description: description,
       isCompleted: false,
     };
-    dispatch(addTodo(newTodo));
+    dispatch(addTodos(newTodo));
     setTitle("");
     setDescription("");
     navigation.goBack();

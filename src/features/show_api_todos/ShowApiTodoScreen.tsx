@@ -1,10 +1,12 @@
 import TodoCard from "components/TodoCard";
 import { useEffect } from "react";
-import { ActivityIndicator, FlatList } from "react-native";
+import { ActivityIndicator, Button, FlatList, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTodo } from "redux/todoThunk";
+import { supabase } from "services/supabase";
 import { AppDispatch, RootState } from "../../app/store";
 import { incrementPage } from "../../redux/todoSlice";
+
 export default function ShowApiTodoScreen() {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -21,22 +23,25 @@ export default function ShowApiTodoScreen() {
   };
 
   return (
-    <FlatList
-      data={todos}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => (
-        <TodoCard
-          todo={{
-            id: item.id.toString(),
-            title: item.title,
-            description: "",
-            isCompleted: item.completed,
-          }}
-        ></TodoCard>
-      )}
-      onEndReached={handleLoadMore}
-      onEndReachedThreshold={0.5}
-      ListFooterComponent={isLoading ? <ActivityIndicator /> : null}
-    />
+    <View>
+      <Button onPress={() => supabase.auth.signOut()} title="Sign out" />
+      <FlatList
+        data={todos}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <TodoCard
+            todo={{
+              id: item.id.toString(),
+              title: item.title,
+              description: "",
+              isCompleted: item.completed,
+            }}
+          ></TodoCard>
+        )}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={isLoading ? <ActivityIndicator /> : null}
+      />
+    </View>
   );
 }

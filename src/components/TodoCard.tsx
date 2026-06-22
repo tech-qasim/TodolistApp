@@ -1,10 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
+import { AppDispatch } from "app/store";
 import Checkbox from "expo-checkbox";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { IconButton, Menu } from "react-native-paper";
 import { useDispatch } from "react-redux";
-import { deleteTodo, toggleCheckMark } from "../redux/todoSlice";
+import { deleteTodos } from "redux/todoThunk";
+import { toggleCheckMark } from "../redux/todoSlice";
 import { Todo } from "../types/todo";
 
 type TodoCardProps = {
@@ -14,7 +16,7 @@ type TodoCardProps = {
 export default function TodoCard({ todo }: TodoCardProps) {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const handleCheckMark = (id: string) => {
     const todoId = {
       id: id,
@@ -22,10 +24,7 @@ export default function TodoCard({ todo }: TodoCardProps) {
     dispatch(toggleCheckMark(todoId));
   };
   const handleDelete = (id: string) => {
-    const todoId = {
-      id: id,
-    };
-    dispatch(deleteTodo(todoId));
+    dispatch(deleteTodos(id));
   };
   return (
     <Pressable

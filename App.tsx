@@ -1,8 +1,10 @@
 // import 'react-native-url-polyfill/auto'
-import Account from "components/Account";
+import Auth from "components/Auth";
 import { useEffect, useState } from "react";
-import { View } from "react-native";
-import Auth from "./src/components/Auth";
+import { PaperProvider } from "react-native-paper";
+import { Provider } from "react-redux";
+import { store } from "./src/app/store";
+import { Navigation } from "./src/navigation/AppNavigation";
 import { supabase } from "./src/services/supabase";
 
 export default function App() {
@@ -38,12 +40,8 @@ export default function App() {
   }, []);
 
   return (
-    <View>
-      {userId ? (
-        <Account key={userId} userId={userId} email={email} />
-      ) : (
-        <Auth />
-      )}
-    </View>
+    <Provider store={store}>
+      <PaperProvider>{userId ? <Navigation /> : <Auth />}</PaperProvider>
+    </Provider>
   );
 }

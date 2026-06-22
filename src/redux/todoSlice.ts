@@ -26,6 +26,9 @@ const todoSlice = createSlice({
     addTodo: (state, action: PayloadAction<Todo>) => {
       state.todos.push(action.payload);
     },
+    setTodo: (state, action: PayloadAction<Todo[]>) => {
+      state.todos = action.payload;
+    },
     toggleCheckMark: (state, action: PayloadAction<{ id: string }>) => {
       const { id } = action.payload;
       const todo = state.todos.find((todo) => todo.id === id);
@@ -59,6 +62,7 @@ const todoSlice = createSlice({
 
 export const {
   addTodo,
+  setTodo,
   toggleCheckMark,
   deleteTodo,
   setIsLoading,

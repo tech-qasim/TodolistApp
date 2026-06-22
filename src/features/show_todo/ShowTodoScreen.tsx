@@ -1,13 +1,20 @@
 import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { FAB } from "react-native-paper";
-import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTodos } from "redux/todoThunk";
+import { AppDispatch, RootState } from "../../app/store";
 import TodoCard from "../../components/TodoCard";
 
 export default function ShowTodoScreen() {
   const navigation = useNavigation();
   const todos = useSelector((state: RootState) => state.todo.todos);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchTodos());
+  }, []);
 
   return (
     <View style={styles.container}>
