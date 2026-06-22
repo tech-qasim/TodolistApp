@@ -13,6 +13,7 @@ export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const styles = appStyles;
 
   async function signInWithEmail() {
     setLoading(true);
@@ -27,17 +28,12 @@ export default function Auth() {
 
   async function signUpWithEmail() {
     setLoading(true);
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: email,
       password: password,
     });
 
     if (error) Alert.alert(error.message);
-    if (!session)
-      Alert.alert("Please check your inbox for email verification!");
     setLoading(false);
   }
 
@@ -86,7 +82,7 @@ export default function Auth() {
   );
 }
 
-const styles = StyleSheet.create({
+export const appStyles = StyleSheet.create({
   container: {
     marginTop: 40,
     padding: 12,
@@ -112,6 +108,11 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
   },
+  inputDisabled: {
+    backgroundColor: "#f2f2f2",
+    borderColor: "#d1d1d1",
+    color: "#9e9e9e",
+  },
   button: {
     backgroundColor: "#2089dc",
     borderRadius: 4,
@@ -125,5 +126,27 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+  },
+  avatarContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  avatar: {
+    borderRadius: 5,
+    overflow: "hidden",
+    maxWidth: "100%",
+    marginBottom: 20,
+  },
+  image: {
+    objectFit: "cover",
+    paddingTop: 0,
+  },
+  noImage: {
+    backgroundColor: "#333",
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: "rgb(200, 200, 200)",
+    borderRadius: 5,
   },
 });

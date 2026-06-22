@@ -1,24 +1,35 @@
 // import 'react-native-url-polyfill/auto'
-import { JwtPayload } from "@supabase/supabase-js";
+import Account from "components/Account";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import Auth from "./src/components/Auth";
 import { supabase } from "./src/services/supabase";
 
 export default function App() {
-  const [claims, setClaims] = useState<JwtPayload | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const fetchClaims = () => {
       supabase.auth.getClaims().then(({ data }) => {
-        setClaims(data?.claims ?? null);
+        setUserId(data?.claims?.sub ?? "");
+        setEmail(data?.claims?.email);
       });
     };
 
     fetchClaims();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      fetchClaims();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      const user = session?.user;
+      if (user) {
+        setUserId(user.id);
+        setEmail(user.email);
+      } else {
+        setUserId(null);
+        setEmail(undefined);
+      }
     });
 
     return () => {
@@ -28,8 +39,11 @@ export default function App() {
 
   return (
     <View>
-      <Auth />
-      {claims && <Text>{claims.sub}</Text>}
+      {userId ? (
+        <Account key={userId} userId={userId} email={email} />
+      ) : (
+        <Auth />
+      )}
     </View>
   );
 }
