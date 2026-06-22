@@ -1,10 +1,27 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getTodos } from "../api/todoApi";
-import { ApiTodo } from "../types/api_todo";
+import { getTodos } from "api/todoApi";
+import { AppDispatch, RootState } from "app/store";
+import { setApiTodos, setIsLoading } from "./todoSlice";
 
-export const fetchTodos = createAsyncThunk<ApiTodo[], number>(
-  "todo/fetchTodos",
-  async (page: number) => {
-    return await getTodos(page);
-  },
-);
+export const fetchTodo =
+  () => async (dispatch: AppDispatch, getState: () => RootState) => {
+    const { page, isLoading } = getState().todo;
+
+    if (isLoading) return;
+    dispatch(setIsLoading(true));
+    try {
+      const todos = await getTodos(page);
+      const fetchTodos = todos.map((apiTodo) => {
+        return {
+          userId: apiTodo.userId,
+          id: apiTodo.id,
+          title: apiTodo.title,
+          completed: apiTodo.completed,
+        };
+      });
+      dispatch(setApiTodos(fetchTodos));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
