@@ -1,23 +1,23 @@
 import TodoCard from "components/TodoCard";
 import { useEffect } from "react";
-import { FlatList } from "react-native";
+import { ActivityIndicator, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchTodo } from "redux/todoThunk";
 import { AppDispatch, RootState } from "../../app/store";
-import { fetchTodos, incrementPage } from "../../redux/todoSlice";
-
+import { incrementPage } from "../../redux/todoSlice";
 export default function ShowApiTodoScreen() {
   const dispatch = useDispatch<AppDispatch>();
 
   const todos = useSelector((state: RootState) => state.todo.apiTodos);
   const page = useSelector((state: RootState) => state.todo.page);
+  const isLoading = useSelector((state: RootState) => state.todo.isLoading);
 
   useEffect(() => {
-    dispatch(fetchTodos(page));
+    dispatch(fetchTodo());
   }, [page]);
 
   const handleLoadMore = () => {
     dispatch(incrementPage());
-    dispatch(fetchTodos(page));
   };
 
   return (
@@ -36,6 +36,7 @@ export default function ShowApiTodoScreen() {
       )}
       onEndReached={handleLoadMore}
       onEndReachedThreshold={0.5}
+      ListFooterComponent={isLoading ? <ActivityIndicator /> : null}
     />
   );
 }
