@@ -1,26 +1,20 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Todo } from "types/todo";
-import { getTodos } from "../api/todoApi";
 import { ApiTodo } from "../types/api_todo";
 
 interface TodoState {
   todos: Todo[];
   apiTodos: ApiTodo[];
   page: number;
+  isLoading: boolean;
 }
 
 const initialState: TodoState = {
   todos: [],
   apiTodos: [],
   page: 1,
+  isLoading: false,
 };
-
-export const fetchTodos = createAsyncThunk<ApiTodo[], number>(
-  "todo/fetchTodos",
-  async (page: number) => {
-    return await getTodos(page);
-  },
-);
 
 const todoSlice = createSlice({
   name: "todo",
@@ -54,22 +48,22 @@ const todoSlice = createSlice({
         todo.description = description;
       }
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchTodos.fulfilled, (state, action) => {
-      const fetchTodos = action.payload.map((apiTodo) => {
-        return {
-          userId: apiTodo.userId,
-          id: apiTodo.id,
-          title: apiTodo.title,
-          completed: apiTodo.completed,
-        };
-      });
-      state.apiTodos.push(...fetchTodos);
-    });
+    setApiTodos: (state, action: PayloadAction<ApiTodo[]>) => {
+      state.apiTodos.push(...action.payload);
+    },
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
   },
 });
 
-export const { addTodo, toggleCheckMark, deleteTodo, editTodo, incrementPage } =
-  todoSlice.actions;
+export const {
+  addTodo,
+  toggleCheckMark,
+  deleteTodo,
+  setIsLoading,
+  editTodo,
+  incrementPage,
+  setApiTodos,
+} = todoSlice.actions;
 export default todoSlice.reducer;
